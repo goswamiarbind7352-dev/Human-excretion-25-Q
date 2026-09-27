@@ -3,19 +3,97 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Manav Utsarjan - 25Q Test - Class 10</title>
+<title>मानव उत्सर्जन - 25Q - Class 10</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#f3efe6;font-family:system-ui,sans-serif;display:flex;justify-content:center;padding:12px;min-height:100vh}
-.container{max-width:520px;width:100%;background:#fff;border:3px solid #5d4037;border-radius:20px;overflow:hidden;box-shadow:0 8px 20px rgba(0,0,0,0.15)}
-.header{background:linear-gradient(135deg,#3e2723,#5d4037);color:#ffecb3;padding:20px;text-align:center}
-.header h2{font-size:20px;margin-bottom:5px}
-.badge{background:#ffca28;color:#000;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700;display:inline-block;margin-top:8px}
-.screen{padding:22px;text-align:center}
-.btn{background:linear-gradient(135deg,#2e7d32,#43a047);color:#fff;border:none;padding:14px 20px;width:100%;border-radius:30px;font-weight:700;font-size:15px;cursor:pointer;margin-top:15px}
-.progress{height:7px;background:#efebe9;width:100%}.fill{height:100%;background:#2e7d32;width:4%;transition:0.3s}
-.topbar{display:flex;justify-content:space-between;padding:12px 15px;background:#efebe9;font-weight:700;font-size:14px}
-.timer{background:#3e2723;color:#fff;padding:5px 14px;border-radius:20px}
-.qtext{font-weight:700;text-align:left;font-size:16px;margin-bottom:14px;color:#3e2723;line-height:1.4}
-.opt label{display:block;border:2px solid #bcaaa4;padding:12px;border-radius:12px;margin:8px 0;text-align:left;background:#fff;cursor:pointer;font-size:15px}
-.opt label.selected
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,sans-serif}
+body{background:#fffbeb;min-height:100vh}
+.header{background:linear-gradient(135deg,#059669,#047857);color:#fff;padding:20px;text-align:center;position:sticky;top:0}
+.container{max-width:700px;margin:0 auto;padding:15px}
+.card{background:#fff;border-radius:16px;padding:18px;margin-bottom:15px;box-shadow:0 4px 12px rgba(0,0,0,0.08);border-left:5px solid #059669}
+.q-num{background:#059669;color:#fff;padding:4px 10px;border-radius:20px;font-size:13px;display:inline-block;margin-bottom:8px}
+.q-text{font-size:16px;font-weight:600;color:#1f2937;margin-bottom:12px;line-height:1.4}
+.opt{display:block;width:100%;text-align:left;padding:12px 14px;margin:7px 0;border:2px solid #e5e7eb;border-radius:10px;background:#f9fafb;font-size:15px;cursor:pointer}
+.opt.selected{border-color:#059669;background:#d1fae5;font-weight:600}
+.btn{width:100%;padding:14px;background:#059669;color:#fff;border:none;border-radius:12px;font-size:17px;font-weight:700;cursor:pointer;margin-top:10px}
+.input{width:100%;padding:12px;border:2px solid #d1d5db;border-radius:10px;margin:10px 0;font-size:16px}
+.timer{position:fixed;bottom:15px;right:15px;background:#1f2937;color:#fff;padding:10px 16px;border-radius:30px;font-weight:700;z-index:20}
+.score{font-size:54px;font-weight:800;color:#059669;text-align:center}
+</style>
+</head>
+<body>
+<div class="header"><h1>🧬 मानव उत्सर्जन - 25 प्रश्न</h1><p>Class 10 | Arbind Sir</p></div>
+<div class="container" id="app">
+<div class="card" id="startScreen" style="text-align:center;padding:30px 20px">
+<h2 style="color:#059669">Test शुरू करें</h2>
+<p style="color:#6b7280;margin:10px 0">25 MCQ | 15 मिनट | Auto Result</p>
+<input class="input" id="sName" placeholder="अपना नाम लिखें *">
+<input class="input" id="sClass" placeholder="कक्षा (जैसे 10A)">
+<button class="btn" onclick="startTest()">▶️ टेस्ट शुरू करो</button>
+</div>
+</div>
+<div class="timer" id="timer" style="display:none">⏱️ 15:00</div>
+<script>
+const questions=[
+{q:"वृक्क की संरचनात्मक व कार्यात्मक इकाई क्या है?",o:["न्यूरॉन","नेफ्रॉन","एल्वियोली","विल्ली"],a:1},
+{q:"मनुष्य में मूत्र का निर्माण कहाँ होता है?",o:["यकृत","वृक्क","फेफड़ा","हृदय"],a:1},
+{q:"नेफ्रॉन का कौन सा भाग रक्त को छानता है?",o:["ग्लोमेरुलस","हेनले लूप","संग्रह नलिका","मूत्रवाहिनी"],a:0},
+{q:"सामान्य मूत्र में कितना प्रतिशत जल होता है?",o:["95%","90%","80%","70%"],a:0},
+{q:"मूत्र का पीला रंग किसके कारण होता है?",o:["यूरोक्रोम","हीमोग्लोबिन","बिलिरुबिन","क्लोरोफिल"],a:0},
+{q:"वृक्क से मूत्राशय तक मूत्र कौन ले जाता है?",o:["मूत्रमार्ग","मूत्रवाहिनी (Ureter)","रक्त वाहिका","हेनले लूप"],a:1},
+{q:"मानव शरीर में वृक्कों की संख्या?",o:["1","2","3","4"],a:1},
+{q:"मूत्र में मुख्य उत्सर्जी पदार्थ क्या है?",o:["ग्लूकोज","यूरिया","प्रोटीन","वसा"],a:1},
+{q:"बोमन संपुट किससे जुड़ा है?",o:["ग्लोमेरुलस","हेनले लूप","संग्रह नलिका","मूत्राशय"],a:0},
+{q:"ADH हार्मोन का कार्य क्या है?",o:["रक्तचाप बढ़ाना","जल पुनरावशोषण","ग्लूकोज नियंत्रण","पाचन"],a:1},
+{q:"डायलिसिस किस अंग के खराब होने पर किया जाता है?",o:["यकृत","वृक्क","हृदय","फेफड़ा"],a:1},
+{q:"वृक्क का वजन लगभग?",o:["100-150 ग्राम","50 ग्राम","300 ग्राम","500 ग्राम"],a:0},
+{q:"प्रत्येक वृक्क में नेफ्रॉन की संख्या लगभग?",o:["10 हजार","1 लाख","10 लाख","1 करोड़"],a:2},
+{q:"मूत्र निर्माण की पहली प्रक्रिया क्या है?",o:["पुनरावशोषण","छानना (Filtration)","स्रवण","उत्सर्जन"],a:1},
+{q:"यूरिया का निर्माण कहाँ होता है?",o:["वृक्क","यकृत","फेफड़ा","त्वचा"],a:1},
+{q:"हेनले लूप का आकार कैसा होता है?",o:["U-आकार","L-आकार","S-आकार","गोल"],a:0},
+{q:"मूत्र का pH मान लगभग?",o:["7.4","6.0","8.0","5.0"],a:1},
+{q:"वृक्क में रक्त किस धमनी से आता है?",o:["वृक्क धमनी","यकृत धमनी","फुफ्फुसीय धमनी","महाधमनी"],a:0},
+{q:"मूत्र में ग्लूकोज का आना किस रोग का लक्षण है?",o:["पीलिया","मधुमेह","उच्च रक्तचाप","एनीमिया"],a:1},
+{q:"मानव वृक्क का आकार कैसा होता है?",o:["गोल","सेम के बीज जैसा","लंबा","त्रिकोणीय"],a:1},
+{q:"नेफ्रॉन के किस भाग में सबसे अधिक पुनरावशोषण होता है?",o:["समीपस्थ कुंडलित नलिका","दूरस्थ कुंडलित नलिका","हेनले लूप","संग्रह नलिका"],a:0},
+{q:"मूत्रवाहिनी की लंबाई लगभग?",o:["5 cm","25-30 cm","50 cm","10 cm"],a:1},
+{q:"उत्सर्जन का मुख्य उद्देश्य क्या है?",o:["ऊर्जा उत्पादन","हानिकारक अपशिष्ट को बाहर निकालना","भोजन पचाना","रक्त बनाना"],a:1},
+{q:"मूत्राशय में मूत्र कितनी देर तक संग्रहित रह सकता है?",o:["1 मिनट","जब तक विसर्जन न हो","10 सेकंड","अनिश्चित"],a:1},
+{q:"कौन सा अंग उत्सर्जन में सहायक है?",o:["केवल वृक्क","वृक्क, फेफड़ा, त्वचा","केवल यकृत","केवल हृदय"],a:1}
+];
+let cur=0,score=0,ans=[],time=900,timerInt,student="";
+function startTest(){
+student=document.getElementById('sName').value.trim();
+if(!student){alert('कृपया नाम लिखें!');return}
+document.getElementById('startScreen').style.display='none';
+document.getElementById('timer').style.display='block';
+renderQ();startTimer();
+}
+function startTimer(){
+timerInt=setInterval(()=>{
+time--;let m=Math.floor(time/60),s=time%60;
+document.getElementById('timer').innerText=`⏱️ ${m}:${String(s).padStart(2,'0')}`;
+if(time<=0){clearInterval(timerInt);showResult()}
+},1000);
+}
+function renderQ(){
+const app=document.getElementById('app');
+if(cur>=questions.length){showResult();return}
+const q=questions[cur];
+app.innerHTML=`<div class="card"><span class="q-num">प्रश्न ${cur+1}/25</span><div class="q-text">${q.q}</div>${q.o.map((opt,i)=>`<button class="opt ${ans[cur]===i?'selected':''}" onclick="selectOpt(${i})">${String.fromCharCode(65+i)}. ${opt}</button>`).join('')}<button class="btn" onclick="nextQ()">${cur===24?'✅ Result देखो':'अगला ➡️'}</button></div>`;
+}
+function selectOpt(i){ans[cur]=i;renderQ();}
+function nextQ(){
+if(ans[cur]===undefined){alert('विकल्प चुनें!');return}
+if(cur<questions.length-1){cur++;renderQ();}else{showResult();}
+}
+function showResult(){
+clearInterval(timerInt);document.getElementById('timer').style.display='none';
+score=0;questions.forEach((q,i)=>{if(ans[i]===q.a)score++});
+const perc=Math.round(score/25*100);
+document.getElementById('app').innerHTML=`<div class="card" style="text-align:center"><h2 style="color:#059669">🎉 Test Complete!</h2><p>${student}</p><div class="score">${score}/25</div><p style="font-size:20px;font-weight:700">${perc}%</p><p>✅ सही: ${score} | ❌ गलत: ${25-score}</p><button class="btn" onclick="location.reload()">🔄 फिर से टेस्ट</button><p style="margin-top:15px;color:#dc2626;font-weight:600">📸 Screenshot Sir को भेजो!</p>
+<div style="text-align:left;margin-top:20px">${questions.map((q,i)=>`<div style="padding:8px;border-bottom:1px solid #eee;font-size:14px"><b>Q${i+1}:</b> ${q.q}<br><span style="color:${ans[i]===q.a?'#16a34a':'#dc2626'}">आपका: ${ans[i]!==undefined?q.o[ans[i]]:'-'} ${ans[i]===q.a?'✅':'❌'}</span><br><span style="color:#16a34a">सही: ${q.o[q.a]} ✅</span></div>`).join('')}</div></div>`;
+window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
